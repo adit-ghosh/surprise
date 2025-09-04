@@ -163,6 +163,71 @@
         scroll-snap-align: unset;
       }
     }
+
+    /* Popup Modal Styles */
+    .popup-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 25, 15, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.3s;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .popup-modal.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .popup-content {
+      background: var(--card);
+      color: var(--primary);
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow-elegant);
+      padding: 2.5rem 2rem 2rem 2rem;
+      max-width: 90vw;
+      width: 400px;
+      text-align: center;
+      position: relative;
+      animation: fade-in 0.5s;
+    }
+    .popup-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 2rem;
+      color: var(--muted-foreground);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .popup-close:hover {
+      color: var(--celebration);
+    }
+    @media (max-width: 500px) {
+      .popup-content {
+        width: 95vw;
+        padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+      }
+      .popup-close {
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 2.2rem;
+      }
+      .popup-content h2 {
+        font-size: 1.25rem !important;
+      }
+      .popup-content p {
+        font-size: 1rem !important;
+      }
+      .popup-content .icon.large {
+        width: 48px;
+        height: 48px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -187,6 +252,20 @@
       <path d="M5 3l1.5 3L10 7l-3.5 1L5 11 3.5 8 0 7l3.5-1L5 3zM19 3l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4zM9 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z"/>
     </symbol>
   </svg>
+
+  <!-- Popup Modal -->
+  <div id="popup-modal" class="popup-modal">
+    <div class="popup-content">
+      <button class="popup-close" aria-label="Close">&times;</button>
+      <div style="text-align:center;">
+        <svg class="icon large text-celebration" style="margin-bottom:1rem;"><use href="#icon-heart"/></svg>
+        <svg class="icon large text-celebration" style="margin-bottom:1rem;"><use href="#icon-star"/></svg>
+        <svg class="icon large text-celebration" style="margin-bottom:1rem;"><use href="#icon-gift"/></svg>
+        <h2 class="text-primary mb-4" style="font-size:2rem;">Best wishes from your loving son!</h2>
+        <p style="font-size:1.25rem; color:var(--celebration); font-weight:500;">Many many Happy returns of the day</p>
+      </div>
+    </div>
+  </div>
 
   <div class="min-h-screen bg-gradient-warm">
     <!-- Hero Section -->
@@ -266,6 +345,17 @@
     }, { threshold: 0.2 });
 
     document.querySelectorAll('.animate-fade-in').forEach(el=>observer.observe(el));
+
+    // Popup Modal Logic
+    const popup = document.getElementById('popup-modal');
+    const closeBtn = popup.querySelector('.popup-close');
+    // Show popup after short delay
+    setTimeout(() => { popup.classList.remove('hide'); }, 600);
+    closeBtn.onclick = () => { popup.classList.add('hide'); };
+    // Optional: close on outside click
+    popup.onclick = (e) => {
+      if (e.target === popup) popup.classList.add('hide');
+    };
   </script>
 </body>
 </html>
